@@ -1,4 +1,6 @@
 import time
+import msvcrt
+import sys
 
 def egg_timer(egg_type):
     # Tempos em segundos para diferentes tipos de ovos cozidos
@@ -14,15 +16,25 @@ def egg_timer(egg_type):
     
     seconds = egg_times[egg_type.lower()]
     print(f"Iniciando timer para ovo {egg_type.lower()} ({seconds//60} minutos)...")
+    print("Pressione Espaço para parar o timer.")
     
-    while seconds > 0:
-        mins, secs = divmod(seconds, 60)
-        timer = f"{mins:02d}:{secs:02d}"
-        print(f"Tempo restante: {timer}", end="\r")
-        time.sleep(1)
-        seconds -= 1
+    try:
+        while seconds > 0:
+            if msvcrt.kbhit() and msvcrt.getch() == b' ':
+                print("\nTimer interrompido pelo usuário!")
+                sys.exit(0)
+                
+            mins, secs = divmod(seconds, 60)
+            timer = f"{mins:02d}:{secs:02d}"
+            print(f"Tempo restante: {timer}", end="\r")
+            time.sleep(1)
+            seconds -= 1
+        
+        print("\nTimer finalizado! Seu ovo está pronto!")
     
-    print("\nTimer finalizado! Seu ovo está pronto!")
+    except KeyboardInterrupt:
+        print("\nTimer interrompido!")
+        sys.exit(0)
 
 def main():
     print("Bem-vindo ao Timer de Ovos Cozidos!")
