@@ -79,6 +79,12 @@ def update_loop():
 def start_timer(egg_type):
     seconds = egg_times[egg_type]
     while seconds > 0:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = event.pos
+                if buttons["terminar"].collidepoint(mouse_pos):
+                    print("\nAplicação encerrada pelo botão Terminar!")
+                    sys.exit(0)
         if msvcrt.kbhit() and msvcrt.getch() == b' ':
             print("\nTimer interrompido pelo usuário!")
             return
